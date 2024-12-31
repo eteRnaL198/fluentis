@@ -10,7 +10,7 @@ export default function Home() {
         Practice Instant English Composition
       </h1>
       <Button className="mt-8 text-xl">
-        <Link href="/">Let's start learning!</Link>
+        <Link href="/">{"Let's start learning!"}</Link>
       </Button>
     </div>
   );
