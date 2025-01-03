@@ -5,6 +5,7 @@ go 1.23.2
 require (
 	github.com/google/generative-ai-go v0.19.0
 	github.com/joho/godotenv v1.5.1
+	github.com/rs/cors v1.11.1
 	google.golang.org/api v0.186.0
 )
 
