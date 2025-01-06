@@ -3,11 +3,14 @@ import Button from "@/components/button";
 import { useEffect, useState } from "react";
 import { fetchQuiz, Quiz } from "@/app/quiz/";
 
+const DEFAULT_COUNTDOWN = 10;
+
 const QuizPage = () => {
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [answerInput, setAnswerInput] = useState("");
   const [loading, setLoading] = useState(true);
+  const [countdown, setCountdown] = useState(DEFAULT_COUNTDOWN);
 
   useEffect(() => {
     (async () => {
@@ -17,8 +20,29 @@ const QuizPage = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (countdown > 0 && !submitted && !loading) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+    if (countdown === 0) {
+      setSubmitted(true);
+    }
+  }, [countdown, loading, submitted]);
+
   return (
     <div className="flex flex-col mt-8">
+      <div className="text-2xl text-center">
+        {countdown === 0 ? (
+          <p>{"Time's up!"}</p>
+        ) : (
+          <>
+            <p>Time remaining:</p>
+            <span className="text-3xl font-bod">{countdown}</span>
+            <p>seconds</p>
+          </>
+        )}
+      </div>
       <div>
         <p className="font-bold text-xl">Question</p>
         <div className="bg-white px-8 py-4 text-lg rounded-lg">
@@ -63,6 +87,7 @@ const QuizPage = () => {
             onClick={() => {
               setSubmitted(false);
               setAnswerInput("");
+              setCountdown(DEFAULT_COUNTDOWN);
               setTimeout(() => {
                 window.location.reload();
               }, 100);
